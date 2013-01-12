@@ -207,7 +207,7 @@ public class Utils
 	
 	public static void sendMessage(String regId, JSONArray addedDeadlines) throws IOException {
 		
-		Sender sender=new Sender("xx");
+		Sender sender=new Sender(Keys.gcmKey);
 		log.setLevel(Level.ALL);
 		log.info("Sending message to device " + regId);
 		Utils.registerObjectifyClasses();

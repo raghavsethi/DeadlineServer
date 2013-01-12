@@ -391,6 +391,8 @@
 
 var unsubscribePost = function () {
 
+	$('.alert').slideUp();
+
 	var clicked = $(this);
 
 	$.post("/api/unsubscribe", {"id":"<%= sub.id %>"}, function(data) {
@@ -414,6 +416,8 @@ var unsubscribePost = function () {
 }
 
 var subscribePost = function () {
+
+	$('.alert').slideUp();
 
 	var clicked = $(this);
 
