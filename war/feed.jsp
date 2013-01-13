@@ -260,9 +260,17 @@
 
 				<hr />
 
+				<h4>Upcoming deadlines</h4>
+
 				<%
+				if(q.count()==0) {
+				%>
+					<p>No upcoming deadlines</p>
+
+				<%
+				}
 				for(Deadline d:q)
-					{
+				{
 				%>
 
 				<div class="deadline">
@@ -316,10 +324,15 @@
 				<!-- Expired deadlines -->
 				<br />
 				<h4>Expired deadlines</h4>
+				<%
+				if(q.count()==0) {
+				%>
+					<p>No expired deadlines</p>
 
 				<%
+				}
 				for(Deadline d:qExpired)
-					{
+				{
 				%>
 
 				<div class="deadline passed">

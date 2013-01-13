@@ -138,6 +138,11 @@
 				<h3>Courses you're subscribed to</h3>
 
 				<%
+				if(managed.size()==0) {
+				%>
+					<p>You aren't subscribed to any courses at the moment.</p>
+				<%
+				}
 				for (Subscription s : subscriptions) {
 				%>
 				<div class="subscription" data-href="/feed/<%= s.id %>">
@@ -175,6 +180,11 @@
 				</div>
 
 				<%
+				if(managed.size()==0) {
+				%>
+					<p>You aren't managing any courses at the moment.</p>
+				<%
+				}
 				for (Subscription s : managed) {
 				%>
 				<div class="subscription" data-href="/feed/<%= s.id %>">
@@ -225,6 +235,7 @@
 	        {
 	            $('#s-message').text(data.message);
 	            $('#subscribe-success').show();
+	            setTimeout("location.reload()", 2000);
 	        }
 	        else
 	        {
@@ -256,7 +267,7 @@
 		        {
 		            $('#s-message').text(data.message);
 		            $('#subscribe-success').show();
-		            setTimeout("window.location = '/profile'", 3000);
+		            setTimeout("location.reload()", 2000);
 		        }
 		        else
 		        {

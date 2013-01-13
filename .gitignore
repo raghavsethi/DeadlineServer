@@ -29,6 +29,7 @@ local.properties
 .buildpath
 
 Keys.java
+local_db.bin
 
 #################
 ## Visual Studio

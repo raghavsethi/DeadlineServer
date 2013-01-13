@@ -166,7 +166,7 @@
                 <hr style="margin-top:0; margin-bottom:7px;" />
 
                 <% if (pendingDeadlines.size()==0) { %>
-                    <p>You don't have any deadlines coming up. Yippee! <a href="/profile">Add to your courses</a> to get upcoming deadlines '</p>
+                    <p>Yippee! No upcoming deadlines. <a href="/profile">Subscribe to more courses</a> to get upcoming deadlines</p>
                 <% } %>
 
                 <%
@@ -223,7 +223,7 @@
                 <h4>Expired deadlines</h4>
 
                 <% if (expiredDeadlines.size()==0) { %>
-                    <p>You don't have any expired deadlines. '</p>
+                    <p>No expired deadlines.</p>
                 <% } %>
 
                 <%

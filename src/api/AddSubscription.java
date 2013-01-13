@@ -97,7 +97,7 @@ public class AddSubscription extends HttpServlet {
 		    return;
 		}
 
-		newSub.numSubscribers = newSub.numSubscribers++;
+		newSub.numSubscribers = newSub.numSubscribers + 1;
 
 		ofy.put(newSub);
 		oldUser.subscriptions.add(newSubKey);
