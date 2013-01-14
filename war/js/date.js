@@ -45,11 +45,11 @@ function printLocalTime(dateInMillis)
 	if(!dateInMillis)
 		return "all day";
 	var now = new Date(dateInMillis);
-	var day = now.getDate()
-	var month = now.getMonth()
-	var year = now.getFullYear()
-	var hours = now.getHours()
-	var minutes = now.getMinutes()
+	var day = now.getDate();
+	var month = now.getMonth();
+	var year = now.getFullYear();
+	var hours = now.getHours();
+	var minutes = now.getMinutes();
 	var suffix = "am";
 	if (hours >= 12) {
 	suffix = "pm";
@@ -62,4 +62,12 @@ function printLocalTime(dateInMillis)
 	minutes = "0" + minutes
 
 	return (hours + ":" + minutes + " " + suffix)						
+}
+
+function pad(number, length){
+    var str = "" + number
+    while (str.length < length) {
+        str = '0'+str
+    }
+    return str
 }

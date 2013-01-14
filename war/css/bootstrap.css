@@ -6022,6 +6022,14 @@ a.badge:hover {
   margin-top:15px;
 }
 
+/* Scheduling chart */
+
+.chart-tooltip {
+  padding: 5px;
+  width: 240px;
+  font-size:14px;
+}
+
 /* Nav */
 
 .bs-docs-sidenav {

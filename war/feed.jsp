@@ -87,6 +87,7 @@
 		<link href="/css/datepicker.css" rel="stylesheet">
 		<link href="/css/timepicker.css" rel="stylesheet">
 		<script src="/js/date.js"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	</head>
 	<body>
 
@@ -221,6 +222,16 @@
 								<span class="deadline-help-inline">DD/MM/YYYY</span>
 							</div>
 						</div>
+
+						<div class="control-group">
+							<label class="control-label">Scheduling Assistance</label>
+							<div class="controls">
+								<a class="btn btn-primary showchart-help" href="#" id="showchart-button" style="width:190px;">Show class workload</a>&nbsp;&nbsp;<span class="deadline-help-inline showchart-help">We recommend you take a look<br /></span>
+								<div id="scheduling-chart" style="width:100%"></div>
+								<span class="deadline-help-inline" id="showchart-help" style="display:none;">This chart shows you how many students in your class have other deadlines on a given day (including deadlines in this course). Hover over a bar to see more details. A good time to schedule a new deadline is when most of your class is relatively unburdened.<br /><br />Note: A deadline at 00:00 on the 6th of September will appear as a deadline due on the 5th of September (because your students will be busy with this deadline on the 5th, rather than the 6th).</span>
+							</div>
+						</div>
+
 						<div class="control-group">
 							<label class="control-label" for="inputTime">Due Time</label>
 							<div class="controls">
@@ -399,157 +410,202 @@
 <script src="/js/bootstrap-timepicker.js"></script>
 
 <script type="text/javascript">
+	var unsubscribePost = function () {
 
+		$('.alert').slideUp();
 
+		var clicked = $(this);
 
-var unsubscribePost = function () {
-
-	$('.alert').slideUp();
-
-	var clicked = $(this);
-
-	$.post("/api/unsubscribe", {"id":"<%= sub.id %>"}, function(data) {
-		if(data.success)
-        {
-            $('#s-message').text(data.message);
-            $('#success-message').show();
-            clicked.remove();
-			$('#feed-menu').append('<a class="btn btn-primary" href="#" id="subscribe-button">Subscribe</a>');
-			$('#subscribe-button').click(subscribePost);
-        }
-        else
-        {
-            $('#e-message').text(data.message);
-            $('#error-message').show();
-            $('#save-feed-button').button('reset')
-        }
-	}, 'json');
-
-	return false;
-}
-
-var subscribePost = function () {
-
-	$('.alert').slideUp();
-
-	var clicked = $(this);
-
-	$.post("/api/subscribe", {"id":"<%= sub.id %>"}, function(data) {
-		if(data.success)
-        {
-            $('#s-message').text(data.message);
-            $('#success-message').show();
-            clicked.remove();
-			$('#feed-menu').append('<a class="btn btn-danger" href="#" id="unsubscribe-button">Unsubscribe</a>');
-			$('#unsubscribe-button').click(unsubscribePost);
-        }
-        else
-        {
-            $('#e-message').text(data.message);
-            $('#error-message').show();
-            $('#save-feed-button').button('reset')
-        }
-	}, 'json');
-
-	return false;
-}
-
-$('#unsubscribe-button').click(unsubscribePost);
-
-$('#subscribe-button').click(subscribePost);
-
-$('.expand-link').click(function(e) {
-
-	var clicked = $(this);
-	var toExpand = clicked.attr("data-expand");
-
-	if($('#'+toExpand).is(':hidden'))
-		$('#'+toExpand).slideDown(200);
-	else
-		$('#'+toExpand).slideUp(200);
-
-	return false;
-
-});
-
-$( ".datepicker" ).datepicker({'format':'dd/mm/yyyy'});
-$( ".timepicker" ).timepicker({'minuteStep':10, 'showMeridian':false});
-
-$('#create-deadline-button').click(function(e) {
-
-	if($('#create-deadline-button').text()=="Create new deadline") {
-		$('#new-deadline-form').fadeIn();
-		$('#create-deadline-button').text("Hide");
-	}
-	else {
-		$('#new-deadline-form').fadeOut();
-		$('#create-deadline-button').text("Create new deadline");
-	}
-
-	return false;	
-});
-
-$('.edit-link').click( function(e) {
-
-	var clicked = $(this);
-	window.location = clicked.attr('href');
-	return true;
-
-});
-
-var saveDeadline = function(e) {
-	$('.alert').hide();
-	$('#save-deadline-button').button('loading');
-
-	var timeStr = $('#inputTime').val();
-	var dateParts = $('#inputDate').val().match(/(\d+)/g);
-	var timeParts = timeStr.match(/(\d+)/g);
-
-	var hrs = (timeStr.indexOf("PM")>-1) ? parseInt(timeParts[0])+12 : parseInt(timeParts[0]);
-
-	// new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
-	var d = new Date(dateParts[2], dateParts[1]-1, dateParts[0], hrs, timeParts[1]);
-
-	$.post('/savedeadline', {'id':0, 'date':d.getTime(), 'title':$('#inputTitle').val(), 'subscription-id':'<%=sub.id%>', 
-		'description':$('#inputDescription').val(), 'attachment-url':$('#inputAttachment').val(), 'additional-info':$('#inputAdditional').val(), 'deadline-id':0}, function(data) {
+		$.post("/api/unsubscribe", {"id":"<%= sub.id %>"}, function(data) {
 			if(data.success)
-			{
-				$('#s-message').text(data.message);
-				$('#create-success').show();
-				setTimeout("window.location.reload()", 2000);
-			}
-			else
-			{
-				$('#e-message').text(data.message);
-				$('#create-error').show();
-				$('#save-feed-button').button('reset')
-			}
-		});
-	return false;
-}
+	        {
+	            $('#s-message').text(data.message);
+	            $('#success-message').show();
+	            clicked.remove();
+				$('#feed-menu').append('<a class="btn btn-primary" href="#" id="subscribe-button">Subscribe</a>');
+				$('#subscribe-button').click(subscribePost);
+	        }
+	        else
+	        {
+	            $('#e-message').text(data.message);
+	            $('#error-message').show();
+	            $('#save-feed-button').button('reset')
+	        }
+		}, 'json');
 
-var qs = (function(a) {
-	if (a == "") return {};
-	var b = {};
-	for (var i = 0; i < a.length; ++i)
-	{
-		var p=a[i].split('=');
-		if (p.length != 2) continue;
-		b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+		return false;
 	}
-	return b;
-})(window.location.search.substr(1).split('&'));
 
-if(qs["newfeed"])
-{
-	$('#newfeed').slideDown();
+	var subscribePost = function () {
+
+		$('.alert').slideUp();
+
+		var clicked = $(this);
+
+		$.post("/api/subscribe", {"id":"<%= sub.id %>"}, function(data) {
+			if(data.success)
+	        {
+	            $('#s-message').text(data.message);
+	            $('#success-message').show();
+	            clicked.remove();
+				$('#feed-menu').append('<a class="btn btn-danger" href="#" id="unsubscribe-button">Unsubscribe</a>');
+				$('#unsubscribe-button').click(unsubscribePost);
+	        }
+	        else
+	        {
+	            $('#e-message').text(data.message);
+	            $('#error-message').show();
+	            $('#save-feed-button').button('reset')
+	        }
+		}, 'json');
+
+		return false;
+	}
+
+	$('#unsubscribe-button').click(unsubscribePost);
+
+	$('#subscribe-button').click(subscribePost);
+
+	$('.expand-link').click(function(e) {
+
+		var clicked = $(this);
+		var toExpand = clicked.attr("data-expand");
+
+		if($('#'+toExpand).is(':hidden'))
+			$('#'+toExpand).slideDown(200);
+		else
+			$('#'+toExpand).slideUp(200);
+
+		return false;
+
+	});
+
+	$( ".datepicker" ).datepicker({'format':'dd/mm/yyyy'});
+	$( ".timepicker" ).timepicker({'minuteStep':10, 'showMeridian':false});
+
+	$('#create-deadline-button').click(function(e) {
+
+		if($('#create-deadline-button').text()=="Create new deadline") {
+			$('#new-deadline-form').fadeIn();
+			$('#create-deadline-button').text("Hide");
+		}
+		else {
+			$('#new-deadline-form').fadeOut();
+			$('#create-deadline-button').text("Create new deadline");
+		}
+
+		return false;	
+	});
+
+	$('.edit-link').click( function(e) {
+
+		var clicked = $(this);
+		window.location = clicked.attr('href');
+		return true;
+
+	});
+
+	var saveDeadline = function(e) {
+		$('.alert').hide();
+		$('#save-deadline-button').button('loading');
+
+		var timeStr = $('#inputTime').val();
+		var dateParts = $('#inputDate').val().match(/(\d+)/g);
+		var timeParts = timeStr.match(/(\d+)/g);
+
+		var hrs = (timeStr.indexOf("PM")>-1) ? parseInt(timeParts[0])+12 : parseInt(timeParts[0]);
+
+		// new Date(year, month [, date [, hours[, minutes[, seconds[, ms]]]]])
+		var d = new Date(dateParts[2], dateParts[1]-1, dateParts[0], hrs, timeParts[1]);
+
+		$.post('/savedeadline', {'id':0, 'date':d.getTime(), 'title':$('#inputTitle').val(), 'subscription-id':'<%=sub.id%>', 
+			'description':$('#inputDescription').val(), 'attachment-url':$('#inputAttachment').val(), 'additional-info':$('#inputAdditional').val(), 'deadline-id':0}, function(data) {
+				if(data.success)
+				{
+					$('#s-message').text(data.message);
+					$('#create-success').show();
+					setTimeout("window.location.reload()", 2000);
+				}
+				else
+				{
+					$('#e-message').text(data.message);
+					$('#create-error').show();
+					$('#save-feed-button').button('reset')
+				}
+			});
+		return false;
+	}
+
+	var qs = (function(a) {
+		if (a == "") return {};
+		var b = {};
+		for (var i = 0; i < a.length; ++i)
+		{
+			var p=a[i].split('=');
+			if (p.length != 2) continue;
+			b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+		}
+		return b;
+	})(window.location.search.substr(1).split('&'));
+
+	if(qs["newfeed"])
+	{
+		$('#newfeed').slideDown();
+	}
+
+	if(qs["success"])
+	{
+		$('#s-message').text(qs["success"]);
+		$('#success-message').show();
+	}
+
+</script>
+
+<!-- For scheduling chart -->
+<script type="text/javascript">
+
+function loadChart() {
+
+	google.load('visualization', '1.0', {'packages':['corechart'], "callback" : drawChart});
+	//google.setOnLoadCallback(drawChart);
 }
 
-if(qs["success"])
-{
-	$('#s-message').text(qs["success"]);
-	$('#success-message').show();
+function drawChart() {
+	var offset = new Date().getTimezoneOffset();
+
+	$.getJSON("/api/schedule", { "id":"<%= sub.id %>", "offset":offset }, function(scheduleData) {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Date');
+		data.addColumn('number', 'Subscribers with assignments');
+		data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
+		data.addRows(scheduleData);
+		var options = {
+			'legend': {position: 'none'},
+			'height':390,
+			'width':'100%',
+			'colors':['#167261', '#1FA38B', '#0E4B40'],
+			'vAxis': {textStyle: {fontSize: 12, color: '#666'}},
+			'hAxis': {title:'Number of subscribers with existing deadlines'},
+			'chartArea': {left: 50, top: 10, height:320, width:'85%'},
+			'tooltip': {isHtml: true},
+			'fontName': 'PT Sans',
+			'bar': {groupWidth: '95%'},
+		};
+
+		// Instantiate and draw chart
+		var chart = new google.visualization.BarChart(document.getElementById('scheduling-chart'));
+		chart.draw(data, options);
+		$('#showchart-help').slideDown();
+	});
 }
+
+$('#showchart-button').click(function() {
+	loadChart();
+	$('#scheduling-chart').html('<center><img src="/img/spinner.gif"/></center>');
+	$('.showchart-help').hide();
+	return false;
+});
+
 
 </script>
 </html>

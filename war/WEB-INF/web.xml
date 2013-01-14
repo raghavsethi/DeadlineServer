@@ -37,6 +37,15 @@
     	<servlet-name>GetDeadlines</servlet-name>
     	<url-pattern>/api/deadlines</url-pattern>
   	</servlet-mapping>
+  	
+  	<servlet>
+    	<servlet-name>GetSubscriberSchedule</servlet-name>
+    	<servlet-class>api.GetSubscriberSchedule</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>GetSubscriberSchedule</servlet-name>
+    	<url-pattern>/api/schedule</url-pattern>
+  	</servlet-mapping>
 	
 	<!-- End API Servlets  -->
 	
