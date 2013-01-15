@@ -238,7 +238,7 @@ public class GetSubscriberSchedule extends HttpServlet
 	    			"</b> students already have deadlines on <b>" + dateString +"</b> in these courses: <b>" 
 	    			+ coursesWithDeadlines + "</b></div>";
 	    	
-	    	System.out.println("Day: " + dateString + " Subscribers affected: " + subscribersWithDeadlineOnDay);
+	    	//System.out.println("Day: " + dateString + " Subscribers affected: " + subscribersWithDeadlineOnDay);
 	    	jsonResult += "[\"" + dateString + "\", " + subscribersWithDeadlineOnDay  + ", \"" + htmlTooltipString
 	    			+ "\"],\n";
 	    }

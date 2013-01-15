@@ -138,7 +138,7 @@
 				<h3>Courses you're subscribed to</h3>
 
 				<%
-				if(managed.size()==0) {
+				if(subscriptions.size()==0) {
 				%>
 					<p>You aren't subscribed to any courses at the moment.</p>
 				<%
