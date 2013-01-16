@@ -18,12 +18,15 @@
 	Subscription sub = null;
 
 	if (user != null) {
-		oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
-		if(oldUser.user==null){
-	    		oldUser.user=user;
-	    		ofy.put(oldUser);
-	    	}
-	}
+        try
+        {
+            oldUser = ofy.get(DUser.class,user.getEmail());
+        }
+        catch(Exception e)
+        {
+            response.sendRedirect("/login");
+        }
+    }
 
 	String requestedFeed = request.getRequestURI();
 	if(requestedFeed.lastIndexOf('/')==requestedFeed.length()-1)
@@ -55,7 +58,7 @@
 	if(oldUser!=null)
 		loggedIn = true;
 
-	if(oldUser!=null && sub.owner.getId()==oldUser.id)
+	if(oldUser!=null && sub.owner.getName().equals(oldUser.email))
 		owner = true;
 
 	if(oldUser!=null) {
@@ -558,6 +561,12 @@
 	{
 		$('#s-message').text(qs["success"]);
 		$('#success-message').show();
+	}
+
+	if(qs["error"])
+	{
+		$('#e-message').text(qs["error"]);
+		$('#error-message').show();
 	}
 
 </script>

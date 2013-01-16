@@ -33,7 +33,7 @@ public class RegisterServlet extends BaseServlet {
 		DUser oldUser = ofy.query(DUser.class).filter("userId",userId).get();
 		if(oldUser==null){
 			DUser newUser=new DUser();
-			newUser.userId=userId;
+			newUser.email=userId;
 			newUser.regId=regId;
 			ofy.put(newUser);
 			log.info("User "+ userId+" registered.");

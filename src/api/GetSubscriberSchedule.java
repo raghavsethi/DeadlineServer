@@ -50,7 +50,15 @@ public class GetSubscriberSchedule extends HttpServlet
 	    	return;
 	    }
 	    
-	    DUser oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
+	    DUser oldUser = null;
+	    try
+	    {
+	    	oldUser = ofy.get(DUser.class,user.getEmail());
+	    }
+	    catch(Exception e)
+	    {
+	    	//Do nothing
+	    }
 	    
 	    resp.setContentType("application/json");
 	        
@@ -59,12 +67,7 @@ public class GetSubscriberSchedule extends HttpServlet
 	    	log.info("User not found in database");
 	    	return;
 	    }
-	    
-	    if(oldUser.user==null){
-	    	oldUser.user=user;
-	    	ofy.put(oldUser);
-	    }
-	    
+
 	    String subscriptionId = (String)req.getParameter("id");
 	    
 	    if(subscriptionId==null)
@@ -91,7 +94,7 @@ public class GetSubscriberSchedule extends HttpServlet
 	    
 	    // Check if user is owner of subscription
 	    
-	    if(s.owner.getId()!=oldUser.id)
+	    if(s.owner.getName()!=oldUser.email)
 	    {
 	    	resp.getWriter().println("[]");
 	    	log.info("User is not course owner");

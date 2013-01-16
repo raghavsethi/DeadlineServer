@@ -33,18 +33,21 @@ public class DeleteFeedServlet extends HttpServlet
 	    	return;
 	    }
 	    
-	    DUser oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
+	    DUser oldUser = null;
+	    try
+	    {
+	    	oldUser = ofy.get(DUser.class,user.getEmail());
+	    }
+	    catch(Exception e)
+	    {
+	    	//Do nothing
+	    }
 	    
 	    resp.setContentType("application/json");
 	    
 	    if(oldUser==null) {
 	    	resp.getWriter().println("{\"success\":false, \"message\":\"Internal error - user not found in database.\"}");
 	    	return;
-	    }
-	    
-	    if(oldUser.user==null){
-	    	oldUser.user=user;
-	    	ofy.put(oldUser);
 	    }
 	    
 	    if(req.getParameter("feed-id")==null)
@@ -65,7 +68,7 @@ public class DeleteFeedServlet extends HttpServlet
 	    	Key<Subscription> sKey = new Key<Subscription>(Subscription.class, feedId);
 	    	Subscription s = ofy.get(sKey);
 	    	DUser owner = ofy.get(s.owner);
-	    	if(owner.user.getEmail().equals(oldUser.user.getEmail()))
+	    	if(owner.email.equals(oldUser.email))
 	    	{
 		    	ofy.delete(s);
 

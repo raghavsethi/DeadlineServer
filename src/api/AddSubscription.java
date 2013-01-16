@@ -36,7 +36,7 @@ public class AddSubscription extends HttpServlet {
 		String subscriptionId= (String)req.getParameter("id");
 		
 		UserService userService = UserServiceFactory.getUserService();
-		DUser oldUser;
+		DUser oldUser = null;
 		
 		resp.setContentType("application/json");
 		
@@ -50,7 +50,14 @@ public class AddSubscription extends HttpServlet {
 		    	return;
 		    }
 		    
-		    oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
+		    try
+		    {
+		    	oldUser = ofy.get(DUser.class,user.getEmail());
+		    }
+		    catch(Exception e)
+		    {
+		    	//Do nothing
+		    }
 		    
 		    if(oldUser==null) {
 		    	resp.getWriter().println("{\"success\":false, \"message\":\"Internal" + 
@@ -103,7 +110,7 @@ public class AddSubscription extends HttpServlet {
 		oldUser.subscriptions.add(newSubKey);
 		ofy.put(oldUser);
 		
-		log.info("Subscription " + newSub.name + " added for user " + oldUser.userId);		
+		log.info("Subscription " + newSub.name + " added for user " + oldUser.email);		
 		resp.getWriter().println("{\"success\":true, \"message\":\"Subscribed successfully!\"}");
 	}
 }

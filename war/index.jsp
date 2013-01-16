@@ -21,16 +21,14 @@
     Subscription sub = null;
 
     if (user != null) {
-        oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
-        if(oldUser==null){
-                oldUser = new DUser();
-                ofy.put(oldUser);
-            }
-
-        if(oldUser.user==null){
-                oldUser.user=user;
-                ofy.put(oldUser);
-            }
+        try
+        {
+            oldUser = ofy.get(DUser.class,user.getEmail());
+        }
+        catch(Exception e)
+        {
+            response.sendRedirect("/login");
+        }
     }
 
     boolean loggedIn=false;

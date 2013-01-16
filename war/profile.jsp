@@ -15,26 +15,20 @@
     User user = userService.getCurrentUser();
 	DUser oldUser = null;
 	
-    if (user == null) {
-		response.sendRedirect(userService.createLoginURL("/profile.jsp"));
-		return;
-	}
-
-	oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
-	
-	if (oldUser == null)
-	{
-		oldUser = new DUser();
-		oldUser.user = user;
-		oldUser.userId=user.getEmail();
-		ofy.put(oldUser);
-	}
-	else{
-		if(oldUser.user==null){
-	    		oldUser.user=user;
-	    		ofy.put(oldUser);
-	    	}
-	}
+    if (user != null) {
+        try
+        {
+            oldUser = ofy.get(DUser.class,user.getEmail());
+        }
+        catch(Exception e)
+        {
+            response.sendRedirect("/login");
+        }
+    }
+    else
+    {
+        response.sendRedirect("/login");
+    }
 
     boolean loggedIn=false;
  

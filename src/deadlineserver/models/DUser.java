@@ -14,10 +14,8 @@ import com.googlecode.objectify.annotation.Indexed;
 @Entity
 public class DUser
 {
-	@Id public Long id;
-	@Indexed public User user;
+	@Id public String email;
 	public String regId;
-	public String userId;
 	
 	public ArrayList<Key<Subscription>> subscriptions;
 	

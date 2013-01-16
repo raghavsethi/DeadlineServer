@@ -52,6 +52,24 @@
 	<!-- Begin Action Servlets -->
 	
 	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>deadlineserver.LoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>EmailVerifyServlet</servlet-name>
+		<servlet-class>deadlineserver.EmailVerifyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmailVerifyServlet</servlet-name>
+		<url-pattern>/verify</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
 		<servlet-name>DeadlineServer</servlet-name>
 		<servlet-class>deadlineserver.DeadlineServerServlet</servlet-class>
 	</servlet>

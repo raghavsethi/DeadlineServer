@@ -14,11 +14,11 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class AdminNotify
+public class SendEmail
 {
-	private static final Logger log = Logger.getLogger(AdminNotify.class.getName());
-	/*
-	public static void NotifyAdminsByEmail(String subject, String message, String severity)
+	private static final Logger log = Logger.getLogger(SendEmail.class.getName());
+	
+	public static void sendCustomEmail(String subject, String message, String to)
 	{
 		log.setLevel(Level.INFO);
 		Properties props = new Properties();
@@ -29,15 +29,13 @@ public class AdminNotify
         try 
         {
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress("support@whatsnextup.com", "WNU Notification Service"));
+            msg.setFrom(new InternetAddress("iiitd.deadline@gmail.com", "IIIT-D Deadline Service"));
             
             msg.addRecipient(Message.RecipientType.TO,
-                             new InternetAddress("raghav@whatsnextup.com", "Raghav Sethi"));
-            msg.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress("mayank@whatsnextup.com", "Mayank Pundir"));
+                             new InternetAddress(to));
             
-            msg.setSubject("WNU " + severity + " alert: " + subject);
-            msg.setText(message + "\n\nGenerated automatically by WNU servers at " + new Date());
+            msg.setSubject(subject);
+            msg.setText(message);
             
             Transport.send(msg);
             successfulSend = true;
@@ -51,7 +49,7 @@ public class AdminNotify
 		}
         
         if(successfulSend)
-        	log.info("Successfully sent email to admins.");
+        	log.info("Successfully sent email.");
         
-	}*/
+	}
 }

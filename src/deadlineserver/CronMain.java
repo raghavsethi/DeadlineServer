@@ -43,7 +43,7 @@ public class CronMain extends HttpServlet
 		{
 			resp.getWriter().println("Error occurred: " + e);
 			e.printStackTrace();
-			//AdminNotify.NotifyAdminsByEmail("Cron failed", "The cron job '" + jobName + "' failed "
+			//SendEmail.NotifyAdminsByEmail("Cron failed", "The cron job '" + jobName + "' failed "
 			//+ "due to " + e, "High");
 		}
 

@@ -15,21 +15,20 @@
     User user = userService.getCurrentUser();
 	DUser oldUser = null;
 	
-    if (user == null) {
-		response.sendRedirect("/index.jsp?message=You%20are%20not%20logged%20in");
-		return;
-	}
-	oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
-	if (oldUser == null)
-	{
-		response.sendRedirect("/index.jsp?message=Error");
-		return;
-	}
-	
-	if(oldUser.user==null){
-	    	oldUser.user=user;
-	    	ofy.put(oldUser);
-	}
+    if (user != null) {
+        try
+        {
+            oldUser = ofy.get(DUser.class,user.getEmail());
+        }
+        catch(Exception e)
+        {
+            response.sendRedirect("/login");
+        }
+    }
+    else
+    {
+        response.sendRedirect("/login");
+    }
 
     boolean loggedIn=false;
 
@@ -146,6 +145,19 @@
             <label><strong>Course Name</strong></label>
             <input type="text" placeholder="Introductory Programming" id="feed-name">
             <span class="help-block">This should be descriptive, but still as short as possible, and should help people understand what exactly they've subscribed to. Alphanumeric characters, underscores and dashes allowed, but we recommend a simple English name</span>
+
+            <div class="control-group" id="website-group">
+                <label><strong>Course Website</strong></label>
+                <input type="text" placeholder="http://sites.google.com/a/iiitd.ac.in/mycourse" id="website-url">
+                <span class="help-block">Optional. This will make it easier for your students to find your course website on the course page</span>
+            </div>
+
+            <div class="control-group" id="group-email-group">
+                <label><strong>Course Mailing List</strong></label>
+                <input type="text" placeholder="cse535@iiitd.ac.in" id="group-email">
+                <span class="help-block">Optional. To ensure that you are the administrator of this group, we will send an email containing a verification link and your email address to the address provided. We will only send email about deadlines to this group after verification is complete.</span>
+            </div>
+
             <button class="btn btn-inverse" id="save-feed-button" onClick="saveFeed()" type="button" data-loading-text="Saving...">Save new course</button>
 
         </form>
@@ -168,7 +180,7 @@ $('.alert').alert();
 var saveFeed = function(e) {
     $('.alert').hide();
     $('#save-feed-button').button('loading');
-    $.post('/newfeed', {'feed-id':$('#feed-id').val(), 'feed-name':$('#feed-name').val()}, function(data) {
+    $.post('/newfeed', {'feed-id':$('#feed-id').val(), 'feed-name':$('#feed-name').val(), 'website-url':$('#website-url').val(), 'group-email':$('#group-email').val()}, function(data) {
         if(data.success)
         {
             $('#s-message').text(data.message);

@@ -30,14 +30,13 @@ public class DeadlineServerServlet extends HttpServlet
 	    DUser oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
 	    if(oldUser==null){
 	    	oldUser=new DUser();
-	    	oldUser.user=user;
-	    	oldUser.userId=user.getEmail();
+	    	oldUser.email = user.getEmail();
 	    	ofy.put(oldUser);
 	    }	    
 	    Subscription s = new Subscription();
 	    s.id = "CSE343";
 	    s.name = "Machine Learning";
-	    s.owner = new Key<DUser>(DUser.class, oldUser.id);
+	    s.owner = new Key<DUser>(DUser.class, user.getEmail());
 	    oldUser.subscriptions.add(new Key<Subscription>(Subscription.class, s.id));
 	    //oldUser.subscriptions.get(0).
 	    ofy.put(s);

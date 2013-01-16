@@ -21,12 +21,19 @@
 	Deadline deadline = null;
 
 	if (user != null) {
-		oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
-		if(oldUser.user==null){
-	    		oldUser.user=user;
-	    		ofy.put(oldUser);
-	    	}
-	}
+        try
+        {
+            oldUser = ofy.get(DUser.class,user.getEmail());
+        }
+        catch(Exception e)
+        {
+            response.sendRedirect("/login");
+        }
+    }
+    else
+    {
+        response.sendRedirect("/login");
+    }
 
 	String requestedDeadline = request.getRequestURI();
 	if(requestedDeadline.lastIndexOf('/')==requestedDeadline.length()-1)
@@ -54,8 +61,8 @@
 	if(oldUser!=null)
 		loggedIn = true;
 
-	if(oldUser!=null && sub.owner.getId()==oldUser.id)
-		owner=true;
+	if(oldUser!=null && sub.owner.getName().equals(oldUser.email))
+		owner = true;
 
 	if(!owner) 
 	{

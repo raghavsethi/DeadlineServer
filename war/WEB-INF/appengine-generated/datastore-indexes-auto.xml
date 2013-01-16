@@ -1,14 +1,14 @@
-<!-- Indices written at Tue, 15 Jan 2013 16:24:52 UTC -->
+<!-- Indices written at Wed, 16 Jan 2013 16:39:34 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 10 times in query history -->
+    <!-- Used 18 times in query history -->
     <datastore-index kind="Deadline" ancestor="false" source="auto">
         <property name="subscription" direction="asc"/>
         <property name="dueDate" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 3 times in query history -->
+    <!-- Used 6 times in query history -->
     <datastore-index kind="Deadline" ancestor="false" source="auto">
         <property name="subscription" direction="asc"/>
         <property name="dueDate" direction="desc"/>

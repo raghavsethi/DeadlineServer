@@ -43,18 +43,21 @@ public class SaveDeadlineServlet extends HttpServlet
 	    	return;
 	    }
 	    
-	    DUser oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
+	    DUser oldUser = null;
+	    try
+	    {
+	    	oldUser = ofy.get(DUser.class,user.getEmail());
+	    }
+	    catch(Exception e)
+	    {
+	    	//Do nothing
+	    }
 	    
 	    resp.setContentType("application/json");
 	        
 	    if(oldUser==null) {
 	    	resp.getWriter().println("{\"success\":false, \"message\":\"Internal error - user not found in database.\"}");
 	    	return;
-	    }
-	    
-	    if(oldUser.user==null){
-	    	oldUser.user=user;
-	    	ofy.put(oldUser);
 	    }
 	    
 	    if(req.getParameter("id")==null || req.getParameter("title")==null 
@@ -98,7 +101,7 @@ public class SaveDeadlineServlet extends HttpServlet
 	    
 	    // Check if user is owner of subscription
 	    
-	    if(s.owner.getId()!=oldUser.id)
+	    if(!s.owner.getName().equals(oldUser.email))
 	    {
 	    	resp.getWriter().println("{\"success\":false, \"message\":\"You are not authorized to add deadlines to this feed.\"}");
 	    	return;
@@ -163,10 +166,10 @@ public class SaveDeadlineServlet extends HttpServlet
 	    	if(deadlineUser.regId==null || !deadlineUser.subscriptions.contains(d.subscription)){
 	    		continue;
 	    	}
-	    	System.out.println(deadlineUser.userId);
+	    	System.out.println(deadlineUser.email);
 	    	System.out.println(deadlineUser.subscriptions.toArray().toString());
 	    	//userList.add(deadlineUser);
-	    	log.info("Newly added deadline to be sent to "+deadlineUser.userId);
+	    	log.info("Newly added deadline to be sent to "+deadlineUser.email);
 	    	PendingMessage message;
 	    	try{
 	    		message=ofy.get(PendingMessage.class, deadlineUser.regId);
@@ -177,7 +180,7 @@ public class SaveDeadlineServlet extends HttpServlet
 		    	message.addedDeadlines.add(new Key<Deadline>(Deadline.class,d.id));
 	    	}
 	    	ofy.put(message);
-	    	log.info("Pending Message to be sent to "+deadlineUser.userId+" added");
+	    	log.info("Pending Message to be sent to "+deadlineUser.email+" added");
 	    }
 	    log.info("Done.");
 	    resp.getWriter().println("{\"success\":true, \"message\":\"Saved deadline!\"}");
