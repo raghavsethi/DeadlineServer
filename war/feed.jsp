@@ -157,7 +157,7 @@
 							<div class="alert alert-success" style="display:none;" id="newfeed">
 								<button type="button" class="close" data-dismiss="alert">×</button>
 								<p style="font-size:18px; font-weight:bold;">You successfully created a new course!</p>
-								Get your students to join by sharing this feed-id: <strong><%= sub.id %></strong>
+								Your students can subscribe using this course id: <strong><%= sub.id %></strong>
 							</div>
 
 							<div class="alert alert-success" style="display:none;" id="success-message">
@@ -264,6 +264,7 @@
 						<div class="control-group">
 							<div class="controls">
 								<button class="btn btn-inverse" id="save-deadline-button" onClick="saveDeadline()" type="button" data-loading-text="Saving...">Create new deadline</button>
+								<span class="deadline-help-inline">Clicking this button will cause an email with the deadline information to be sent to your course group, and push notifications to be sent to subscribers with Android devices.</span>
 							</div>
 						</div>
 					</form>
@@ -399,7 +400,7 @@
 	</div>
 	<hr />
 	<footer class="container">
-		<p>Built by Mayank Pundir, Naved Alam and Raghav Sethi. Some rights reserved.</p>
+		<p>Built by Raghav Sethi, Mayank Pundir and Naved Alam at <a href="http://www.iiitd.ac.in">IIIT-D</a>. Some rights reserved.</p>
 	</footer>
 </body>
 

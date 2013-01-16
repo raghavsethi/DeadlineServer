@@ -1,7 +1,7 @@
 Deadline Server
 ===============
 
-Server for the Deadline course notification system
+Server for the Deadline course notification system. Built by Raghav Sethi, Mayank Pundir and Naved Alam at IIIT-D.
 
 API Notes
 ----------

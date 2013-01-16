@@ -280,7 +280,7 @@
 </div>
 <hr />
 <footer class="container">
-    <p>Built by Mayank Pundir, Naved Alam and Raghav Sethi. Some rights reserved.</p>
+    <p>Built by Raghav Sethi, Mayank Pundir and Naved Alam at <a href="http://www.iiitd.ac.in">IIIT-D</a>. Some rights reserved.</p>
 </footer>
 </body>
 <script src="/js/jquery.js"></script>

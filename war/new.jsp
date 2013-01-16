@@ -141,7 +141,7 @@
               <div class="control-group" id="feed-id-group">
                 <label><strong>Course ID</strong></label>
                 <input type="text" placeholder="intro-to-crypto" id="feed-id">
-                <span class="help-block">This should be short and unique. People can subscribe to your course using just this ID. Alphanumeric characters, underscores and dashes allowed.</span>
+                <span class="help-block">This should be short, unique and identifiable (like a username). People can subscribe to your course using just this ID. Alphanumeric characters, underscores and dashes allowed. We will automatically force this to be lowercase.</span>
             </div>
             <label><strong>Course Name</strong></label>
             <input type="text" placeholder="Introductory Programming" id="feed-name">
@@ -155,7 +155,7 @@
 </div>
 <hr />
 <footer class="container">
-    <p>Built by Mayank Pundir, Naved Alam and Raghav Sethi. Some rights reserved.</p>
+    <p>Built by Raghav Sethi, Mayank Pundir and Naved Alam at <a href="http://www.iiitd.ac.in">IIIT-D</a>. Some rights reserved.</p>
 </footer>
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.js"></script>
@@ -184,6 +184,27 @@ var saveFeed = function(e) {
     });
     return false;
 }
+
+$("#feed-id").keyup(function(event) {
+    
+    var dirty = $("#feed-id").val();
+    var cleaned = "";
+
+    for(i=0; i<dirty.length; i++)
+    {
+        if((dirty[i]<='z' && dirty[i]>='a') || 
+           (dirty[i]<='Z' && dirty[i]>='A') ||
+           (dirty[i]<='9' && dirty[i]>='0') ||
+           dirty[i]=='-' || dirty[i]=='_')
+        {
+            cleaned+=dirty[i];
+        }
+    }
+
+    $("#feed-id").val(cleaned.toLowerCase());
+});
+
+
 </script>
 
 </body>
