@@ -86,6 +86,7 @@
 		<link href="/css/datepicker.css" rel="stylesheet">
 		<link href="/css/timepicker.css" rel="stylesheet">
 		<script src="/js/date.js"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	</head>
 	<body>
 		<script type = "text/javascript">
@@ -172,20 +173,30 @@
 
 						<legend>Edit deadline</legend>
 						<div class="control-group">
-							<label class="control-label" for="inputTitle">Title</label>
+							<label class="control-label required" for="inputTitle">Title</label>
 							<div class="controls">
 								<input type="text" id="inputTitle" placeholder="Title" value="<%=deadline.title%>">
 								<span class="deadline-help-inline">Describe the deadline as succintly as possible. Example: Homework Assignment 2.</span>
 							</div>
 						</div>
+
 						<div class="control-group">
-							<label class="control-label" for="inputDate">Due Date</label>
+							<label class="control-label">Scheduling Assistance</label>
+							<div class="controls">
+								<a class="btn btn-primary showchart-help" href="#" id="showchart-button" style="width:190px;">Show class workload</a>&nbsp;<span class="deadline-help-inline showchart-help">Use this to see how busy your class is<br /></span>
+								<div id="scheduling-chart" style="width:100%"></div>
+								<span class="deadline-help-inline" id="showchart-help" style="display:none;">This chart shows you how many students in your class have other deadlines on a given day (including deadlines in this course). Hover over a bar to see more details. A good time to schedule a new deadline is when most of your class is relatively unburdened.<br /><br />Note: A deadline at 00:00 on the 6th of September will appear as a deadline due on the 5th of September (because your students will be busy with this deadline on the 5th, rather than the 6th).</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label required" for="inputDate">Due Date</label>
 							<div class="controls">
 								<input type="datetime" id="inputDate" placeholder="Date" class="datepicker" value="">
 								<span class="deadline-help-inline">DD/MM/YYYY</span>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="control-group required">
 							<label class="control-label" for="inputTime">Due Time</label>
 							<div class="controls">
 								<input type="datetime" id="inputTime" placeholder="Time" class="timepicker" value="">
@@ -217,6 +228,7 @@
 						<div class="control-group">
 							<div class="controls">
 								<button class="btn btn-inverse" id="save-deadline-button" onClick="saveDeadline()" type="button" data-loading-text="Saving...">Save deadline</button>
+								<span class="deadline-help-inline">Clicking this button will cause an email with the deadline information to be sent to your course group, and push notifications to be sent to subscribers with Android devices.</span>
 							</div>
 						</div>
 					</form>
@@ -347,5 +359,63 @@ if(qs["newfeed"])
 }
 
 </script>
+
+<!-- For scheduling chart -->
+<script type="text/javascript">
+
+function loadChart() {
+
+	google.load('visualization', '1.0', {'packages':['corechart'], "callback" : drawChart});
+	//google.setOnLoadCallback(drawChart);
+}
+
+function drawChart() {
+	var offset = new Date().getTimezoneOffset();
+
+	$.getJSON("/api/schedule", { "id":"<%= sub.id %>", "offset":offset }, function(scheduleData) {
+
+		if(scheduleData.length==0)
+		{
+			$('#showchart-help').text("Your subscribers don't seem to have any other deadlines.");
+			$('#scheduling-chart').html("");
+			$('#showchart-help').slideDown();
+			return;
+		}
+
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Date');
+		data.addColumn('number', 'Subscribers with assignments');
+		data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
+		data.addRows(scheduleData);
+		var options = {
+			'legend': {position: 'none'},
+			'height':390,
+			'width':'100%',
+			'colors':['#167261', '#1FA38B', '#0E4B40'],
+			'vAxis': {textStyle: {fontSize: 12, color: '#666'}},
+			'hAxis': {title:'Number of subscribers with existing deadlines'},
+			'chartArea': {left: 50, top: 10, height:320, width:'85%'},
+			'tooltip': {isHtml: true},
+			'fontName': 'PT Sans',
+			'bar': {groupWidth: '95%'},
+		};
+
+		// Instantiate and draw chart
+		var chart = new google.visualization.BarChart(document.getElementById('scheduling-chart'));
+		chart.draw(data, options);
+		$('#showchart-help').slideDown();
+	});
+}
+
+$('#showchart-button').click(function() {
+	loadChart();
+	$('#scheduling-chart').html('<center><img src="/img/spinner.gif"/></center>');
+	$('.showchart-help').hide();
+	return false;
+});
+
+
+</script>
+
 </body>
 </html>

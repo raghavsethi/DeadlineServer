@@ -212,14 +212,24 @@
 					<form class="form-horizontal" action="/savedeadline">
 						<legend>Create new deadline</legend>
 						<div class="control-group">
-							<label class="control-label" for="inputTitle">Title</label>
+							<label class="control-label required" for="inputTitle">Title</label>
 							<div class="controls">
 								<input type="text" id="inputTitle" placeholder="Title">
 								<span class="deadline-help-inline">Describe the deadline as succintly as possible. Example: Homework Assignment 2.</span>
 							</div>
 						</div>
+						
 						<div class="control-group">
-							<label class="control-label" for="inputDate">Due Date</label>
+							<label class="control-label">Scheduling Assistance</label>
+							<div class="controls">
+								<a class="btn btn-primary showchart-help" href="#" id="showchart-button" style="width:190px;">Show class workload</a>&nbsp;<span class="deadline-help-inline showchart-help">Use this to see how busy your class is<br /></span>
+								<div id="scheduling-chart" style="width:100%"></div>
+								<span class="deadline-help-inline" id="showchart-help" style="display:none;">This chart shows you how many students in your class have other deadlines on a given day (including deadlines in this course). Hover over a bar to see more details. A good time to schedule a new deadline is when most of your class is relatively unburdened.<br /><br />Note: A deadline at 00:00 on the 6th of September will appear as a deadline due on the 5th of September (because your students will be busy with this deadline on the 5th, rather than the 6th).</span>
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label required" for="inputDate">Due Date</label>
 							<div class="controls">
 								<input type="text" id="inputDate" placeholder="Date" class="datepicker">
 								<span class="deadline-help-inline">DD/MM/YYYY</span>
@@ -227,16 +237,7 @@
 						</div>
 
 						<div class="control-group">
-							<label class="control-label">Scheduling Assistance</label>
-							<div class="controls">
-								<a class="btn btn-primary showchart-help" href="#" id="showchart-button" style="width:190px;">Show class workload</a>&nbsp;&nbsp;<span class="deadline-help-inline showchart-help">We recommend you take a look<br /></span>
-								<div id="scheduling-chart" style="width:100%"></div>
-								<span class="deadline-help-inline" id="showchart-help" style="display:none;">This chart shows you how many students in your class have other deadlines on a given day (including deadlines in this course). Hover over a bar to see more details. A good time to schedule a new deadline is when most of your class is relatively unburdened.<br /><br />Note: A deadline at 00:00 on the 6th of September will appear as a deadline due on the 5th of September (because your students will be busy with this deadline on the 5th, rather than the 6th).</span>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label class="control-label" for="inputTime">Due Time</label>
+							<label class="control-label required" for="inputTime">Due Time</label>
 							<div class="controls">
 								<input type="text" id="inputTime" placeholder="Time" class="timepicker">
 								<span class="deadline-help-inline">Your computer's timezone will be used</span>
@@ -584,10 +585,11 @@ function drawChart() {
 	var offset = new Date().getTimezoneOffset();
 
 	$.getJSON("/api/schedule", { "id":"<%= sub.id %>", "offset":offset }, function(scheduleData) {
-		
-		if(scheduleData.length===0)
+
+		if(scheduleData.length==0)
 		{
-			$('#showchart-help').text("Your subscribers don't have any other deadlines.");
+			$('#showchart-help').text("Your subscribers don't seem to have any other deadlines.");
+			$('#scheduling-chart').html("");
 			$('#showchart-help').slideDown();
 			return;
 		}

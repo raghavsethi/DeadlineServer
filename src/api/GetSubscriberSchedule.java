@@ -206,6 +206,8 @@ public class GetSubscriberSchedule extends HttpServlet
 	    SimpleDateFormat localDateFormat = new SimpleDateFormat("MMM");
 	    localDateFormat.setTimeZone(localTimeZone);
 	    
+	    int totalSubscribersAffected = 0; // Used to figure out whether any subscribers at all are affected
+	    
 	    for(int i=0; i<dateRange; i++)
 	    {
 	    	String dateString = localCalendar.get(Calendar.DAY_OF_MONTH) + "-";
@@ -234,13 +236,31 @@ public class GetSubscriberSchedule extends HttpServlet
 	    		coursesWithDeadlines = coursesWithDeadlines.substring(0, coursesWithDeadlines.length()-2);
 	    	
 	    	beginCurrentBucket = endCurrentBucket;
-	    	
+	    	totalSubscribersAffected += subscribersWithDeadlineOnDay;
 	    	numSubscribersAffected.add(subscribersWithDeadlineOnDay);
 	    	
-	    	String htmlTooltipString = "<div class=\\\"chart-tooltip\\\"><b>" + subscribersWithDeadlineOnDay + 
-	    			"</b> students already have deadlines on <b>" + dateString +"</b> in these courses: <b>" 
-	    			+ coursesWithDeadlines + "</b></div>";
+	    	String htmlTooltipString = "";
 	    	
+	    	if(subscribersWithDeadlineOnDay>1)
+	    	{
+	    		htmlTooltipString += "<div class=\\\"chart-tooltip\\\"><b>" + subscribersWithDeadlineOnDay + 
+		    			"</b> students already have deadlines on <b>" + dateString +"</b> ";
+	    	}
+	    	else
+	    	{
+	    		htmlTooltipString += "<div class=\\\"chart-tooltip\\\"><b>" + subscribersWithDeadlineOnDay + 
+		    			"</b> student already has deadlines on <b>" + dateString +"</b> ";
+	    	}
+	    	
+	    	if(coursesWithDeadlines.indexOf(',')>-1)
+	    	{
+	    		htmlTooltipString += "in these courses: <b>" 	+ coursesWithDeadlines + "</b></div>";
+	    	}
+	    	else
+	    	{
+	    		htmlTooltipString += "in this course: <b>" 	+ coursesWithDeadlines + "</b></div>";
+	    	}
+
 	    	//System.out.println("Day: " + dateString + " Subscribers affected: " + subscribersWithDeadlineOnDay);
 	    	jsonResult += "[\"" + dateString + "\", " + subscribersWithDeadlineOnDay  + ", \"" + htmlTooltipString
 	    			+ "\"],\n";
@@ -248,6 +268,12 @@ public class GetSubscriberSchedule extends HttpServlet
 	    
 	    jsonResult = jsonResult.substring(0, jsonResult.length()-2);
 	    jsonResult += "\n]";
+	    
+	    if(totalSubscribersAffected==0)
+	    {
+	    	log.info("No subscribers affected by this deadline");
+	    	jsonResult="[]";
+	    }
 	    
 	    resp.getWriter().println(jsonResult);
 	}

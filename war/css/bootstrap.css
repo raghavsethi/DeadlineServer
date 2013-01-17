@@ -6022,6 +6022,23 @@ a.badge:hover {
   margin-top:15px;
 }
 
+/* Required form elements */
+
+.required:after  {
+  content: " *";
+  color:red;
+  font-weight: bold;
+}
+
+form:after  {
+  content: "Fields marked with a * are required.";
+  color:red;
+  display:block;
+  padding-top:10px;
+  font-size:12px;
+}
+
+
 /* Scheduling chart */
 
 .chart-tooltip {

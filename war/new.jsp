@@ -138,11 +138,11 @@
               </div>
 
               <div class="control-group" id="feed-id-group">
-                <label><strong>Course ID</strong></label>
+                <label class="required"><strong>Course ID</strong></label>
                 <input type="text" placeholder="intro-to-crypto" id="feed-id">
                 <span class="help-block">This should be short, unique and identifiable (like a username). People can subscribe to your course using just this ID. Alphanumeric characters, underscores and dashes allowed. We will automatically force this to be lowercase.</span>
             </div>
-            <label><strong>Course Name</strong></label>
+            <label class="required"><strong>Course Name</strong></label>
             <input type="text" placeholder="Introductory Programming" id="feed-name">
             <span class="help-block">This should be descriptive, but still as short as possible, and should help people understand what exactly they've subscribed to. Alphanumeric characters, underscores and dashes allowed, but we recommend a simple English name</span>
 
