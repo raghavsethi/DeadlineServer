@@ -584,6 +584,14 @@ function drawChart() {
 	var offset = new Date().getTimezoneOffset();
 
 	$.getJSON("/api/schedule", { "id":"<%= sub.id %>", "offset":offset }, function(scheduleData) {
+		
+		if(scheduleData.length===0)
+		{
+			$('#showchart-help').text("Your subscribers don't have any other deadlines.");
+			$('#showchart-help').slideDown();
+			return;
+		}
+
 		var data = new google.visualization.DataTable();
 		data.addColumn('string', 'Date');
 		data.addColumn('number', 'Subscribers with assignments');

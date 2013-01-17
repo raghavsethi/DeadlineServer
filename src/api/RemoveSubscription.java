@@ -36,7 +36,7 @@ public class RemoveSubscription extends HttpServlet {
 		String subscriptionId= (String)req.getParameter("id");
 		
 		UserService userService = UserServiceFactory.getUserService();
-		DUser oldUser;
+		DUser oldUser = null;
 		
 		resp.setContentType("application/json");
 		
@@ -49,8 +49,15 @@ public class RemoveSubscription extends HttpServlet {
 		    "need to be logged-in to modify subscriptions.\"}");
 		    	return;
 		    }
-		    
-		    oldUser = ofy.query(DUser.class).filter("userId",user.getEmail()).get();
+
+		    try
+		    {
+		    	oldUser = ofy.get(DUser.class,user.getEmail());
+		    }
+		    catch(Exception e)
+		    {
+		    	//Do nothing
+		    }
 		    
 		    if(oldUser==null) {
 		    	resp.getWriter().println("{\"success\":false, \"message\":\"Internal" + 

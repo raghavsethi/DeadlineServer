@@ -94,7 +94,7 @@ public class GetSubscriberSchedule extends HttpServlet
 	    
 	    // Check if user is owner of subscription
 	    
-	    if(s.owner.getName()!=oldUser.email)
+	    if(!s.owner.getName().equals(oldUser.email))
 	    {
 	    	resp.getWriter().println("[]");
 	    	log.info("User is not course owner");
