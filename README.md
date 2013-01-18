@@ -16,13 +16,12 @@ API Results
 For /api/deadlines returned JSON is of this format:
 
 {
-	'subscriptions' : [
-		{'hci' : 'Human Computer Interaction'},
-		{'aa' : 'Advanced Algorithms'}
+	"subscriptions" : [
+		{"id":"hci", "name":"Human Computer Interaction"},
+		{"id":"aa", "name":"Advanced Algorithms"}
 	]
 
-	'deadlines' : [
-		{'date':1234671294, 'title':'ABC', 'description':'Very important deadline', 'course':'hci'},
-		{'date':1234671294, 'title':'DEF', 'description':'Another important deadline', 'course':'aa'},
+	"deadlines" : [
+		{"id":"1","title":"Assignment 1","subscription":"Introduction to Programming","updated":false,"description":"","attachmentUrl":null,"additionalInfo":null,"dueDate":"Wed Jan 30 16:30:00 UTC 2013"}
 	]
 }
