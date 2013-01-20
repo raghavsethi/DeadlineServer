@@ -149,13 +149,18 @@
             <div class="control-group" id="website-group">
                 <label><strong>Course Website</strong></label>
                 <input type="text" placeholder="http://sites.google.com/a/iiitd.ac.in/mycourse" id="website-url">
-                <span class="help-block">Optional. This will make it easier for your students to find your course website on the course page</span>
+                <span class="help-block">This will make it easier for your students to find your course website on the course page</span>
             </div>
 
             <div class="control-group" id="group-email-group">
                 <label><strong>Course Mailing List</strong></label>
                 <input type="text" placeholder="cse535@iiitd.ac.in" id="group-email">
-                <span class="help-block">Optional. To ensure that you are the administrator of this group, we will send an email containing a verification link and your email address to the address provided. We will only send email about deadlines to this group after verification is complete.</span>
+                <span class="help-block">Optional. The email address you enter will be used as the recipient of email notifications for deadlines.</span>
+            </div>
+
+            <div class="control-group alert alert-error" id="group-email-instructions" style="display:none;">
+                <h4>You must allow 'iiitd.deadline@gmail.com' to send email messages to this address before proceeding.</h4>
+                <p>To ensure that you are the administrator of this group, we will send an email containing a verification link and your email address to the address provided. We will only send email about deadlines to this group after verification is complete.</p>
             </div>
 
             <button class="btn btn-inverse" id="save-feed-button" onClick="saveFeed()" type="button" data-loading-text="Saving...">Save new course</button>
@@ -214,6 +219,17 @@ $("#feed-id").keyup(function(event) {
     }
 
     $("#feed-id").val(cleaned.toLowerCase());
+});
+
+$('#group-email').keyup(function() {
+    if($('#group-email-instructions').is(':visible'))
+    {
+
+    }
+    else
+    {
+        $('#group-email-instructions').slideDown();
+    }
 });
 
 
