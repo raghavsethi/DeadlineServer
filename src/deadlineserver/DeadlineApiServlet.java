@@ -38,7 +38,7 @@ public class DeadlineApiServlet extends HttpServlet{
 			}
 		}
 		else if(userId!=null){
-			oldUser = ofy.query(DUser.class).filter("userId",regId).get();
+			oldUser = ofy.query(DUser.class).filter("userId",userId).get();
 			if(oldUser==null || oldUser.regId==null){
 				log.severe("API called with unregistered user");
 			    resp.getWriter().println("{\"error\":0, \"errorstr\":\"User not registered.\"}");

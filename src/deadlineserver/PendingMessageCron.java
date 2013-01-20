@@ -50,6 +50,7 @@ public class PendingMessageCron {
 		jObject.put("dueDate", d.dueDate.toString());
 		jObject.put("subscription", s.name);
 		jObject.put("id", d.id);
+		jObject.put("updated", d.updated);
 		return jObject;
 	}
 	

@@ -158,36 +158,21 @@ public class Utils
 		
 		JSONObject jResult=new JSONObject();
 		
-		JSONArray jDeadlinesResult = new JSONArray();
+		JSONArray jDeadlines = new JSONArray();
+		JSONArray jSubscriptions = new JSONArray();
 		for(int i=0;i<oldUser.subscriptions.size();i++){
-			
-			JSONObject jSubscription =new JSONObject();
-			JSONArray jDeadlines = new JSONArray();
-			
-			Query<Deadline> q=ofy.query(Deadline.class).filter("subscription",oldUser.subscriptions.get(i));			
-			
+			Query<Deadline> q=ofy.query(Deadline.class).filter("subscription",oldUser.subscriptions.get(i));
 			Subscription s=ofy.get(oldUser.subscriptions.get(i));
-			
-			jSubscription.put("subscription",s.name);
-
 			for(Deadline d:q) {
 				jDeadlines.add(getDeadlineJSON(d, s.name));
 			}
-			
-			jSubscription.put("deadlines",jDeadlines);
-			jDeadlinesResult.add(jSubscription);
-		}
-		jResult.put("DEADLINES", jDeadlinesResult);
-		
-		JSONArray jSubscriptionsResult = new JSONArray();
-		for(int i=0;i<oldUser.subscriptions.size();i++){
-			
 			JSONObject jSubscription =new JSONObject();
-			jSubscription.put("id", ofy.get(oldUser.subscriptions.get(i)).id);
-			jSubscription.put("name", ofy.get(oldUser.subscriptions.get(i)).name);
-			jSubscriptionsResult.add(jSubscription);
+			jSubscription.put("id", s.id);
+			jSubscription.put("name", s.name);
+			jSubscriptions.add(jSubscription);
 		}
-		jResult.put("SUBSCRIPTIONS", jSubscriptionsResult);		
+		jResult.put("DEADLINES", jDeadlines);
+		jResult.put("SUBSCRIPTIONS", jSubscriptions);		
 		return jResult;
 	}
 	
