@@ -52,5 +52,4 @@ public class SendEmail
         	log.info("Successfully sent email.");
         
 	}
-	
 }
